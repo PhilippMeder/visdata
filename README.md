@@ -18,7 +18,7 @@ Distributed under the [BSD 3-Clause License](./LICENSE).
 This README covers the following:
 1. [Profile2d Plot for 2D-histograms](#profile2d-plot-for-2d-histograms)
 2. [Visual Comparison of Measurements](#visual-comparison-of-measurements-including-uncertainties)
-3. [Table Output for Terminal, CSV, and $\LaTeX$](#formatted-table-output-for-terminal-csv-and)
+3. [Table Output for Terminal, CSV, and LaTeX](#formatted-table-output-for-terminal-csv-and)
 4. [Additional Features](#additional-features)
 
 Check out the [examples](./examples)!
@@ -86,9 +86,9 @@ fig, axs, handles, labels = comp_plot.plot()
 ...
 ```
 
-### Formatted Table Output for Terminal, CSV, and $\LaTeX$
+### Formatted Table Output for Terminal, CSV, and LaTeX
 
-Create a Table object from a 2D-array and get the wanted output, either as a nice terminal output, a CSV table, or a $\LaTeX$ table ready for your document.
+Create a Table object from a 2D-array and get the wanted output, either as a nice terminal output, a CSV table, or a LaTeX table ready for your document.
 You can name the columns and rows independently and add a caption if you want. Furthermore, you can specify a formatter for the data.
 
 ```python
@@ -111,7 +111,7 @@ print(table.csv(formatter=formatter))
 print(table.latex(formatter=formatter))
 ```
 
-The $\LaTeX$ output returns a scientific table.
+The LaTeX output returns a scientific table.
 The terminal representation mimics this, e.g.
 
 ```console

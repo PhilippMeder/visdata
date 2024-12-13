@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     plt.show()
     # save_plot(fig, "./doc/figs/profile2d_example_1.pdf", transparent=False)
-    # save_plot(fig, "./doc/figs/profile2d_example_1.png", transparent=False)
+    # save_plot(fig, "./doc/figs/profile2d_example_1.png", transparent=False, dpi=300)
 
     # Example with predefined data
     x, y = create_fixed_hist2d_data()
@@ -100,4 +100,4 @@ if __name__ == "__main__":
 
     plt.show()
     # save_plot(fig, "./doc/figs/profile2d_example_2.pdf", transparent=False)
-    # save_plot(fig, "./doc/figs/profile2d_example_2.png", transparent=False)
+    # save_plot(fig, "./doc/figs/profile2d_example_2.png", transparent=False, dpi=300)

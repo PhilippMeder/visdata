@@ -8,16 +8,14 @@ def get_colorblind_style():
     return "tableau-colorblind10"
 
 
-def save_plot(fig, file, bbox_inches=None, pad_inches=0.05, transparent=True):
+def save_plot(fig, file, **kwargs):
     """Save a figure to file with some nice presettings."""
-    if bbox_inches is None:
-        bbox_inches = "tight"
-
     fig.savefig(
         file,
-        transparent=transparent,
-        bbox_inches=bbox_inches,
-        pad_inches=pad_inches
+        transparent=kwargs.pop("transparent", True),
+        bbox_inches=kwargs.pop("bbox_inches", "tight"),
+        pad_inches=kwargs.pop("pad_inches", 0.05),
+        **kwargs
     )
 
 

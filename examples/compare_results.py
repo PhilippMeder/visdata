@@ -51,7 +51,7 @@ if __name__ == "__main__":
     measurements = get_example_measurements()
     fig = make_plot(measurements)
     # save_plot(fig, "./doc/figs/compare_measurements.pdf", transparent=False)
-    # save_plot(fig, "./doc/figs/compare_measurements.png", transparent=False)
+    # save_plot(fig, "./doc/figs/compare_measurements.png", transparent=False, dpi=300)
     plt.show()
 
     # config = MeasurementResultPlotConfig()
