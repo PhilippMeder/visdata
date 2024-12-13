@@ -38,7 +38,7 @@ def get_example_measurements():
 @timer
 def make_plot(measurements, **kwargs):
     compare_plot = CompareMeasurementsPlot(*measurements, **kwargs)
-    fig, axs, handles, labels = compare_plot.plot(ncols=3)
+    fig, axs, handles, labels = compare_plot.plot(ncols=2)
     fig.legend(handles, labels, loc="lower right", bbox_to_anchor=(0.985, 0.035), frameon=False)
     fig.tight_layout()
 
@@ -47,11 +47,11 @@ def make_plot(measurements, **kwargs):
 
 if __name__ == "__main__":
     # from visdata.plotting.matplotlib_util import latex_output, save_plot
-    # with latex_output():
+    # with latex_output(figsize=(6, 3), style="tableau-colorblind10"):
     measurements = get_example_measurements()
     fig = make_plot(measurements)
-    # save_plot(fig, "compare_measurements.pdf")
-    # save_plot(fig, "compare_measurements.png")
+    # save_plot(fig, "./doc/figs/compare_measurements.pdf", transparent=False)
+    # save_plot(fig, "./doc/figs/compare_measurements.png", transparent=False)
     plt.show()
 
     # config = MeasurementResultPlotConfig()

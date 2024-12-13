@@ -77,7 +77,7 @@ if __name__ == "__main__":
     compare_to_old_filter = False
 
     # from visdata.plotting.matplotlib_util import latex_output, save_plot
-    # with latex_output():
+    # with latex_output(style="tableau-colorblind10"):
 
     # Example with random data
     n_events = 500
@@ -89,7 +89,8 @@ if __name__ == "__main__":
     ax.set_ylim(-0.3, 0.3)
 
     plt.show()
-    # save_plot(fig, "profile2d_example_1.png")
+    # save_plot(fig, "./doc/figs/profile2d_example_1.pdf", transparent=False)
+    # save_plot(fig, "./doc/figs/profile2d_example_1.png", transparent=False)
 
     # Example with predefined data
     x, y = create_fixed_hist2d_data()
@@ -98,4 +99,5 @@ if __name__ == "__main__":
     ax.set_ylabel(r"$(S_\text{meas} - S_\text{mod})/\text{mV}$")
 
     plt.show()
-    # save_plot(fig, "profile2d_example_2.png")
+    # save_plot(fig, "./doc/figs/profile2d_example_2.pdf", transparent=False)
+    # save_plot(fig, "./doc/figs/profile2d_example_2.png", transparent=False)

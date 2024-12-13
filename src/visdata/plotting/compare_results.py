@@ -107,6 +107,7 @@ class MeasurementResult:
             self.value,
             label=label,
             color=color,
+            edgecolor="face",
             marker=marker,
             **config.value,
         )

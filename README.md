@@ -2,7 +2,12 @@
 
 **Useful tools for data visualisation, e.g. 2D-profiles, comparison of measurements, or tables.**
 
-Developed and maintained by Philipp Meder.
+***This package is still under development. The features work, but the API might change in the future.***
+
+Developed and maintained by [Philipp Meder](https://github.com/philippmeder).
+
+* **Source code:** https://github.com/philippmeder/visdata
+* **Report bugs:** https://github.com/philippmeder/visdata/issues
 
 ## License
 
@@ -11,14 +16,14 @@ Distributed under the [BSD 3-Clause License](./LICENSE).
 ## Features
 
 This README covers the following:
-1. [Profile2d plot for 2D-histograms](#profile2d-plot-for-2d-histograms)
-2. [Visual comparison of measurements](#visual-comparison-of-measurements-including-uncertainties)
-3. [Table output for terminal, CSV, and $\LaTeX$](#formatted-table-output-for-terminal-csv-and)
-4. [Further features](#further-content)
+1. [Profile2d Plot for 2D-histograms](#profile2d-plot-for-2d-histograms)
+2. [Visual Comparison of Measurements](#visual-comparison-of-measurements-including-uncertainties)
+3. [Table Output for Terminal, CSV, and $\LaTeX$](#formatted-table-output-for-terminal-csv-and)
+4. [Additional Features](#additional-features)
 
 Check out the [examples](./examples)!
 
-### Profile2d plot for 2D-histograms
+### Profile2d Plot for 2D-histograms
 Profiles allow a visual interpretation of the data, e.g. in the following figures where red markers represent the mean with the standard error on the mean and pink markers represent the median of the y-data in each x-bin:
 
 Profile shows an angle-dependent deviation from the zero line | Profile shows deviations from the model
@@ -43,11 +48,14 @@ profile = Profile2d(x, y, bins=10)
 profile.add_to_axis(ax)
 ```
 
-### Visual comparison of measurements including uncertainties
+### Visual Comparison of Measurements Including Uncertainties
 
 Sometimes it is easier to understand if different measurements are compatible with each other by looking at a visualisation, e.g. you want to compare your own measurements of some parameters with the measurements presented in other publications with respect to the uncertainties.
+The example shows
+- *statistical uncertainties* as medium thick errorbars,
+- *systematic uncertainties* as thin errorbars with caps,
+- *quadratic combination* of both as thick errobars with transparency (for visual guidance only, this value is meaningless).
 
-The figure shows the statistical uncertainties as medium thick errorbars, the systematic uncertainties as thin errorbars with caps, and the quadratic combination of both as thick errobars with transparency (for visual guidance only, there is no such thing as a combination of systematic and statistical uncertainty).
 You can  of course configure what and how to plot.
 In this example, *Publication 1* did not provide any values for $\beta$ and $\delta$ while *Publication 2* did not provide a value for $\gamma$.
 
@@ -78,7 +86,7 @@ fig, axs, handles, labels = comp_plot.plot()
 ...
 ```
 
-### Formatted table output for terminal, CSV, and $\LaTeX$
+### Formatted Table Output for Terminal, CSV, and $\LaTeX$
 
 Create a Table object from a 2D-array and get the wanted output, either as a nice terminal output, a CSV table, or a $\LaTeX$ table ready for your document.
 You can name the columns and rows independently and add a caption if you want. Furthermore, you can specify a formatter for the data.
@@ -116,9 +124,19 @@ A1              3.00e+00      4.00e+00      5.00e+00
 ────────────────────────────────────────────────────
 ```
 
-### Further content
+### Additional Features
 - Decorators for code development, e.g. timer for function execution
 - Intervals
 - Functions like secans or cos called with angle in degrees
 - Regular polygons for plotting and calculation of their most important properties
 - Some utilities for matplotlib output
+
+## Installation and Requirements
+
+You will need ``numpy`` and ``matplotlib`` in addition to  ``python 3.13`` (other python version might work but were not tested). You can get the newest version using ``pip`` from the [github repository](https://github.com/philippmeder/visdata):
+
+```
+pip install git+https://github.com/philippmeder/visdata
+```
+
+An official PyPI release should be available in the near future.
