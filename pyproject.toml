@@ -1,0 +1,19 @@
+[project]
+name = "visdata"
+version = "0.1.0"
+authors = [
+  { name="Philipp Meder", email="148459685+PhilippMeder@users.noreply.github.com" },
+]
+description = "Package for data visualisation."
+readme = "README.md"
+requires-python = ">=3.13"
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/pypa/sampleproject"
+Issues = "https://github.com/pypa/sampleproject/issues"
