@@ -62,3 +62,7 @@ if __name__ == "__main__":
 
     # config = MeasurementResultPlotConfig()
     # print(object_vars_str(config))
+
+    # for measurement in measurements:
+    #     for name, parameter in measurement.results.items():
+    #         print(name, parameter, f"{parameter:5.2f}")

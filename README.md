@@ -1,4 +1,6 @@
-# VisData
+<h1 align="center">
+<img src="./doc/figs/visdata_logo.svg" width="300">
+</h1>
 
 **Useful tools for data visualisation, e.g. 2D-profiles, comparison of measurements, or tables.**
 
@@ -133,7 +135,7 @@ A1              3.00e+00      4.00e+00      5.00e+00
 
 ## Installation and Requirements
 
-You will need ``numpy`` and ``matplotlib`` in addition to  ``python 3.13`` (other python version might work but were not tested). You can get the newest version using ``pip`` from the [github repository](https://github.com/philippmeder/visdata):
+You will need ``numpy`` and ``matplotlib`` in addition to  ``python 3.13`` (other python versions might work but were not tested). You can get the newest version using ``pip`` from the [github repository](https://github.com/philippmeder/visdata):
 
 ```
 pip install git+https://github.com/philippmeder/visdata

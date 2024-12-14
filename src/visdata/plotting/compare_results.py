@@ -99,6 +99,14 @@ class MeasurementResult:
         """Return quadratic combination of stat. and sys. uncertainties (Shady!)."""
         return self.total_uncertainty
 
+    def __format__(self, formatter):
+        """Return formatted string representation as 'value +- stat +- sys'."""
+        return f"{self.value:{formatter}} +- {self.stat:{formatter}} +- {self.sys:{formatter}}"
+
+    def __str__(self):
+        """Return string representation as 'value +- stat +- sys'."""
+        return f"{self:9.2e}"
+
     def add_to_axis(
         self, ax, position, label, color, marker, config: MeasurementResultPlotConfig
     ):
