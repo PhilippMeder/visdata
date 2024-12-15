@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from visdata.decorators import timer
-from visdata import Profile2d, Profile2dPlotConfigMean, Profile2dPlotConfigMedian
+from visdata import Profile2d, Profile2dPlotConfig, Profile2dPlotConfigMean, Profile2dPlotConfigMedian
 
 
 def create_hist2d_data(n=1000):
@@ -51,7 +51,7 @@ def test_profile_plot(x, y, bins_hist=20, bins_profile=20, compare_to_old_filter
     # Default plot configs
     profile.add_to_axis(ax)
     # Custom plot configs
-    # profile.add_to_axis(ax, Profile2dPlotConfigMedian(yerr="std"), Profile2dPlotConfigMean())
+    # profile.add_to_axis(ax, Profile2dPlotConfigMedian(err="std"), Profile2dPlotConfigMean())
 
     # The old filter is horribly slow and will be removed in the future
     if compare_to_old_filter:

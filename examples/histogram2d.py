@@ -35,7 +35,7 @@ def test(x_data, y_data, bins=10):
     return fig, axs
 
 
-def test2(x, y, bins=10, marginal=False, profile=False):
+def test2(x, y, bins=20, marginal=False, profile=False):
     hist = Histogram2d(x, y, bins=bins)
     hist.configure_marginal(color="C1")
     fig, axs = hist.plot(marginal=marginal, profile=profile, cmap="cividis_r", cmin=1)
@@ -44,8 +44,8 @@ def test2(x, y, bins=10, marginal=False, profile=False):
 
 
 if __name__ == "__main__":
-    x, y = create_hist2d_data()
-    x, y = create_fixed_hist2d_data()
+    x, y = create_hist2d_data(500)
+    # x, y = create_fixed_hist2d_data()
     # x = np.linspace(0, 10, 1000) ** 3
     # y = np.linspace(0, 1, 1000) ** 2
 

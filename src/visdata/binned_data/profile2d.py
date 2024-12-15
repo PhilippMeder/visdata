@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 import warnings
 
 import numpy as np
@@ -6,42 +5,55 @@ import numpy as np
 from .binning import bin_centers, which_bin
 
 
-@dataclass(kw_only=True)
-class Profile2dPlotConfigBase:
+class Profile2dPlotConfig:
 
-    quantity: str | None = None
-    label: str | None = None
-    xerr: str | int | float | None = None
-    yerr: str | int | float | None = None
-    color: str | None = None
-    marker: str | None = None
-    markersize: int | None = None
-    linewidth: int | None = None
-    capsize: int | None = None
+    def __init__(self, quantity, err=None, **kwargs):
+        self._quantity = quantity
+        self._err = err
+        self._options = {"linestyle": "", "barsabove": True, "label": f"{quantity} with {err}"}
+        self._options.update(kwargs)
 
-    def __post_init__(self):
-        if self.label is None:
-            self.label = f"{self.quantity} ({self.xerr}, {self.yerr})"
+    @property
+    def quantity(self):
+        return self._quantity
 
+    @property
+    def err(self):
+        return self._err
 
-@dataclass(kw_only=True)
-class Profile2dPlotConfigMean(Profile2dPlotConfigBase):
-
-    quantity: str | None = "mean"
-    yerr: str | int | None = "sem"
-    color: str | None = "r"
-    marker: str | None = "."
-    markersize: int | None = 5
-    linewidth: int | None = 1
-    capsize: int | None = 2
+    @property
+    def options(self):
+        return self._options
 
 
-@dataclass(kw_only=True)
-class Profile2dPlotConfigMedian(Profile2dPlotConfigBase):
-    quantity: str | None = "median"
-    color: str | None = "deeppink"
-    marker: str | None = "s"
-    markersize: int | None = 6
+class Profile2dPlotConfigMean(Profile2dPlotConfig):
+
+    def __init__(self, **kwargs):
+        # Set and patch default options
+        err = kwargs.pop("err", "sem")
+        options = {
+            "color": "r",
+            "marker": ".",
+            "markersize": 5,
+            "elinewidth": 1,
+            "capsize": 2
+        }
+        options.update(kwargs)
+        super().__init__("mean", err=err, **options)
+
+
+class Profile2dPlotConfigMedian(Profile2dPlotConfig):
+
+    def __init__(self, **kwargs):
+        # Set and patch default options
+        err = kwargs.pop("err", None)
+        options = {
+            "color": "deeppink",
+            "marker": "s",
+            "markersize": 6
+        }
+        options.update(kwargs)
+        super().__init__("median", err=err, **options)
 
 
 class Profile2d:
@@ -150,7 +162,7 @@ class Profile2d:
         """Return the standard error of the mean for each x bin."""
         return self.__sems
 
-    def add_to_axis(self, ax, *configs: Profile2dPlotConfigBase):
+    def add_to_axis(self, ax, *configs: Profile2dPlotConfig):
         """Add the profile to the given axis."""
         add_profile2d_to_axis(
             ax,
@@ -164,11 +176,11 @@ class Profile2d:
 
 
 def add_profile2d_to_axis(
-    ax, xcenter, mean, sem, std, median, *configs: Profile2dPlotConfigBase
+    ax, xcenter, mean, sem, std, median, *configs: Profile2dPlotConfig
 ):
     """Add profile2d plot to given axis."""
     if not len(configs):
-        configs = (Profile2dPlotConfigMean(), Profile2dPlotConfigMedian())
+        configs = (Profile2dPlotConfigMedian(), Profile2dPlotConfigMean())
 
     for config in configs:
         match config.quantity:
@@ -179,7 +191,7 @@ def add_profile2d_to_axis(
             case _:
                 raise ValueError(f"Unknown quantity '{config.quantity}'!")
 
-        match config.yerr:
+        match config.err:
             case "sem" | "standard error on the mean":
                 yerr = sem
             case "std" | "standard deviation":
@@ -187,28 +199,6 @@ def add_profile2d_to_axis(
             case 0 | None | False:
                 yerr = None
             case _:
-                raise ValueError(f"Unknown error quantity '{config.yerr}'!")
+                raise ValueError(f"Unknown error quantity '{config.err}'!")
 
-        if yerr is not None or config.xerr is not None:
-            ax.errorbar(
-                xcenter,
-                data,
-                xerr=config.xerr,
-                yerr=yerr,
-                color=config.color,
-                linestyle="",
-                marker=config.marker,
-                markersize=config.markersize,
-                elinewidth=config.linewidth,
-                capsize=config.capsize,
-                label=config.label,
-            )
-        else:
-            ax.scatter(
-                xcenter,
-                data,
-                c=config.color,
-                marker=config.marker,
-                s=config.markersize**2,  # markersize definition differs from errorbar
-                label=config.label,
-            )
+        ax.errorbar(xcenter, data, yerr=yerr, **config.options)
