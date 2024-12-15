@@ -1,6 +1,6 @@
 [project]
 name = "visdata"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="Philipp Meder", email="148459685+PhilippMeder@users.noreply.github.com" },
 ]

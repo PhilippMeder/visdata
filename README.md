@@ -32,7 +32,7 @@ Profile shows an angle-dependent deviation from the zero line | Profile shows de
 ----|----
 ![](doc/figs/profile2d_example_1.png) | ![](doc/figs/profile2d_example_2.png)
 
-Create a Profile2d object with your data and directly add the profile to a plot (you may adjust what and how to plot) or get the profile data and do the plotting yourself.
+Create a Profile2d object with your data and directly add the profile to a plot (you may adjust what and how to plot, see Histogramd2d example) or get the profile data and do the plotting yourself.
 
 ```python
 from matplotlib import pyplot as plt
@@ -48,6 +48,30 @@ hist, xedges, yedges, image = ax.hist2d(x, y, bins=10)
 # Create profile and add it to the axis (using default config)
 profile = Profile2d(x, y, bins=10)
 profile.add_to_axis(ax)
+```
+
+You can also use a Histogram2d object which gives you the ability to directly draw a profile.
+In addition, it allows to plot 1D-histograms of the x/y data on the margins, which looks like this:
+
+![](doc/figs/histogram2d_example.png)
+
+You can configure the marginal plots and the profile, see the following example:
+
+```python
+from visdata import Histogram2d, Profile2dPlotConfigMean
+
+hist = Histogram2d(x, y, bins=bins)
+# Configure the marginal histograms if wanted, e.g. the color
+# Keywords are passed to 'ax.hist'
+hist.configure_marginal(color="C2")
+# Configure the profile with a set of configs, e.g. only plot the mean but change the marker
+hist.configure_profile(
+    # Keywords are passed to 'ax.errorbar'
+    Profile2dPlotConfigMean(marker="v")
+    # You could add another config here, e.g. to plot the median
+)
+# Plot hist2d with colorbar + 1D-histograms and profile
+fig, axs = hist.plot(marginal=True, profile=True)
 ```
 
 ### Visual Comparison of Measurements Including Uncertainties
