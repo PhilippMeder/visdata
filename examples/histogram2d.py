@@ -26,13 +26,13 @@ def test(x, y, bins=20, marginal=False, profile=False):
 
 
 if __name__ == "__main__":
-    x, y = create_hist2d_data(500)
+    x, y = create_hist2d_data(1000)
 
     # from visdata.plotting.matplotlib_util import latex_output, save_plot
     # with latex_output():
     with plt.rc_context(rc={"figure.figsize": (5, 3)}):
         fig, axs = test(x, y, marginal=True, profile=True)
         # save_plot(fig, "./doc/figs/histogram2d_example.pdf", transparent=False)
-        # save_plot(fig, "./doc/figs/histogram2d_example.png", transparent=False, dpi=300)
+        # save_plot(fig, "./doc/figs/histogram2d_example.png", transparent=False, dpi=200)
 
     plt.show()
