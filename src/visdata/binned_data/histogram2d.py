@@ -217,10 +217,20 @@ class Histogram2d:
         self.clabel = clabel if clabel is not None else "$n$"
 
         self.configure_marginal()
+        self.configure_marginal_grid()
         self.configure_profile()
 
     def configure_marginal(self, **kwargs):
         self._marginal_kwargs = kwargs
+
+    def configure_marginal_grid(self, **kwargs):
+        self._marginal_grid = {
+            "main_width_ratio": 5,
+            "main_height_ratio": 5,
+            "cbar_width_ratio": 0.5,
+            "cbar_spacing": 1
+        }
+        self._marginal_grid.update(kwargs)
 
     def configure_profile(self, *args, **kwargs):
         self._profile_args = args
@@ -235,10 +245,17 @@ class Histogram2d:
 
         return fig, ax
 
-    def hist2d(self, subplot=None, colorbar_ax=None ,**kwargs):
+    def hist2d(self, subplot=None, colorbar_ax=None, colorbar_ratio=None,**kwargs):
         fig, ax = self.get_subplot(subplot)
         hist, xedges, yedges, image = ax.hist2d(self._x, self._y, bins=self._bins, **kwargs)
-        fig.colorbar(image, cax=colorbar_ax, label=self.clabel)
+        # print(colorbar_ratio)
+        # for name, spine in colorbar_ax.spines.items():
+        #     spine.set_visible(False)
+        # colorbar_ax.xaxis.set_visible(False)
+        # colorbar_ax.yaxis.set_visible(False)
+        # for name, val in vars(colorbar_ax).items():
+        #     print(name, val, sep="\t")
+        fig.colorbar(image, cax=colorbar_ax)#, fraction=1, shrink=colorbar_ratio, label=self.clabel)
 
         return fig, ax, image
 
@@ -275,27 +292,36 @@ class Histogram2d:
 
         outer_a, outer_b = ratio_par_cbar, 1
         a, b, d = ratio_par_main, 1 , ratio_par_main
+        c = 0.5
 
         figsize = fig.get_size_inches()
         fig_ratio = figsize[0] / figsize[1]
-        subgrid_ratio = outer_a / (outer_a + outer_b)
-        main_ratio = b / (a + b)
+        subgrid_ratio = 1 # outer_a / (outer_a + outer_b)
+        main_ratio = b / (a + b + c)
 
         factor = main_ratio * subgrid_ratio * fig_ratio
         fix_ratio = d * factor / (1 - factor)
 
-        outer_grid = fig.add_gridspec(1, 2, wspace=0.05, hspace=0, width_ratios=(outer_a, outer_b))
-        grid_spec = outer_grid[0].subgridspec(2, 2, wspace=0, hspace=0, width_ratios=(a, b), height_ratios=(fix_ratio, d))
+        # outer_grid = fig.add_gridspec(1, 2, wspace=0.05, hspace=0, width_ratios=(outer_a, outer_b))
+        # grid_spec = outer_grid[0].subgridspec(2, 2, wspace=0, hspace=0, width_ratios=(a, b), height_ratios=(fix_ratio, d))
+        grid_spec = fig.add_gridspec(2, 3, wspace=0, hspace=0, width_ratios=(a, b, c), height_ratios=(fix_ratio, d))
         ax_hist2d = fig.add_subplot(grid_spec[1, 0])
         ax_hist_x = fig.add_subplot(grid_spec[0, 0], sharex=ax_hist2d)
         ax_hist_y = fig.add_subplot(grid_spec[1, 1], sharey=ax_hist2d)
-        colorbar_ax = fig.add_subplot(outer_grid[1])
+        # colorbar_ax = fig.add_subplot(outer_grid[1])
+        # colorbar_ax = fig.add_subplot(grid_spec[1, 2])
+        colorbar_ax = ax_hist_y.inset_axes([1.05, 0, c / (a + b + c) * figsize[0] - 0.05, 1])
 
-        return fig, ax_hist2d, ax_hist_x, ax_hist_y, colorbar_ax
+        # ax_hist2d = fig.add_gridspec(top=0.75, right=0.75).subplots()
+        # ax_hist_x = ax_hist2d.inset_axes([0, 1, 1, 0.25], sharex=ax_hist2d)
+        # ax_hist_y = ax_hist2d.inset_axes([1, 0, 0.25, 1], sharey=ax_hist2d)
+        # colorbar_ax = ax_hist2d.inset_axes([1.3, 0, 0.2, 1])
+
+        return fig, ax_hist2d, ax_hist_x, ax_hist_y, colorbar_ax, 1#d / (fix_ratio + d)
 
     def plot(self, marginal=False, profile=False, **kwargs):
         if marginal:
-            fig, ax_hist2d, ax_hist_x, ax_hist_y, colorbar_ax = self._setup_marginal_subplots()
+            fig, ax_hist2d, ax_hist_x, ax_hist_y, colorbar_ax, colorbar_ratio = self._setup_marginal_subplots()
             axs = (ax_hist2d, ax_hist_x, ax_hist_y)
         else:
             fig, ax_hist2d = plt.subplots()
@@ -303,7 +329,7 @@ class Histogram2d:
             axs = ax_hist2d
 
         # Create plots
-        self.hist2d(subplot=(fig, ax_hist2d), colorbar_ax=colorbar_ax, **kwargs)
+        self.hist2d(subplot=(fig, ax_hist2d), colorbar_ax=colorbar_ax, colorbar_ratio=colorbar_ratio, **kwargs)
         ax_hist2d.set_xlabel(self.xlabel)
         ax_hist2d.set_ylabel(self.ylabel)
 
