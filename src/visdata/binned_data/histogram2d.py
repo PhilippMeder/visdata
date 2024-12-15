@@ -238,9 +238,9 @@ class Histogram2d:
     def hist2d(self, subplot=None, colorbar_ax=None ,**kwargs):
         fig, ax = self.get_subplot(subplot)
         hist, xedges, yedges, image = ax.hist2d(self._x, self._y, bins=self._bins, **kwargs)
-        fig.colorbar(image, ax=colorbar_ax, label=self.clabel)
+        fig.colorbar(image, cax=colorbar_ax, label=self.clabel)
 
-        return fig, ax
+        return fig, ax, image
 
     def hist(self, dimension: str, subplot=None, **kwargs):
         fig, ax = self.get_subplot(subplot)
@@ -266,15 +266,36 @@ class Histogram2d:
 
         return fig, ax
 
+    def _setup_marginal_subplots(self):
+        """Create subplots so that width(marginal(y))=height(marginal(x))."""
+        fig = plt.figure()
+
+        ratio_par_cbar = 30
+        ratio_par_main = 5
+
+        outer_a, outer_b = ratio_par_cbar, 1
+        a, b, d = ratio_par_main, 1 , ratio_par_main
+
+        figsize = fig.get_size_inches()
+        fig_ratio = figsize[0] / figsize[1]
+        subgrid_ratio = outer_a / (outer_a + outer_b)
+        main_ratio = b / (a + b)
+
+        factor = main_ratio * subgrid_ratio * fig_ratio
+        fix_ratio = d * factor / (1 - factor)
+
+        outer_grid = fig.add_gridspec(1, 2, wspace=0.05, hspace=0, width_ratios=(outer_a, outer_b))
+        grid_spec = outer_grid[0].subgridspec(2, 2, wspace=0, hspace=0, width_ratios=(a, b), height_ratios=(fix_ratio, d))
+        ax_hist2d = fig.add_subplot(grid_spec[1, 0])
+        ax_hist_x = fig.add_subplot(grid_spec[0, 0], sharex=ax_hist2d)
+        ax_hist_y = fig.add_subplot(grid_spec[1, 1], sharey=ax_hist2d)
+        colorbar_ax = fig.add_subplot(outer_grid[1])
+
+        return fig, ax_hist2d, ax_hist_x, ax_hist_y, colorbar_ax
+
     def plot(self, marginal=False, profile=False, **kwargs):
         if marginal:
-            # TODO: Maybe we can use something better, e.g. subplot2grid
-            fig = plt.figure()
-            grid_spec = fig.add_gridspec(3, 3, wspace=0, hspace=0)
-            ax_hist2d = fig.add_subplot(grid_spec[1:, :-1])
-            ax_hist_x = fig.add_subplot(grid_spec[0, :-1], sharex=ax_hist2d)
-            ax_hist_y = fig.add_subplot(grid_spec[1:, -1], sharey=ax_hist2d)
-            colorbar_ax = ax_hist_y
+            fig, ax_hist2d, ax_hist_x, ax_hist_y, colorbar_ax = self._setup_marginal_subplots()
             axs = (ax_hist2d, ax_hist_x, ax_hist_y)
         else:
             fig, ax_hist2d = plt.subplots()
@@ -304,4 +325,8 @@ class Histogram2d:
             profile.add_to_axis(ax_hist2d, *self._profile_args, **self._profile_kwargs)
 
         # axs = fig.get_axes()
+        for ax in fig.get_axes():
+            bbox = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+            print(f"{bbox.width:5.2f}\t{bbox.height:5.2f}")
+
         return fig, axs
